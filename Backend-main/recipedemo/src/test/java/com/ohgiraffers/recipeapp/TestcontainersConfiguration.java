@@ -12,7 +12,9 @@ class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     MySQLContainer<?> mysqlContainer() {
-        return new MySQLContainer<>(DockerImageName.parse("mysql:latest"));
+        return new MySQLContainer<>(DockerImageName.parse("mysql:8.0")) // MySQL 버전 8.0 사용
+                .withDatabaseName("saegil")   // 데이터베이스 이름 설정
+                .withUsername("root")        // 사용자 이름 설정
+                .withPassword("1868");       // 비밀번호 설정
     }
-
 }
