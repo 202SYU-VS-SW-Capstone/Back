@@ -1,6 +1,6 @@
 package com.ohgiraffers.recipeapp.controller;
 
-import com.ohgiraffers.recipeapp.entity.CookingStep;
+import com.ohgiraffers.recipeapp.dto.CookingStepDTO;
 import com.ohgiraffers.recipeapp.service.CookingStepService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,61 +11,65 @@ import java.util.List;
 @RequestMapping("/api/cooking-steps")
 public class CookingStepController {
 
-    private final CookingStepService cookingStepService;
+    private final CookingStepService service;
 
-    public CookingStepController(CookingStepService cookingStepService) {
-        this.cookingStepService = cookingStepService;
+    public CookingStepController(CookingStepService service) {
+        this.service = service;
     }
 
     /**
-     * 특정 레시피의 모든 조리 단계 조회
+     * 레시피 ID로 조리 단계 목록 조회
      *
-     * @param recipeId 레시피 ID (Query Parameter)
-     * @return ResponseEntity<List<CookingStep>> - 해당 레시피의 조리 단계 목록과 HTTP 상태 코드
+     * @param recipeId 레시피 ID
+     * @return ResponseEntity<List<CookingStepDTO>> - 조리 단계 목록
      */
-    @GetMapping
-    public ResponseEntity<List<CookingStep>> getCookingStepsByRecipe(@RequestParam Long recipeId) {
-        List<CookingStep> steps = cookingStepService.getCookingStepsByRecipe(recipeId);
+    @GetMapping("/recipe/{recipeId}")
+    public ResponseEntity<List<CookingStepDTO>> getStepsByRecipe(
+            @PathVariable(name = "recipeId") Long recipeId
+    ) {
+        List<CookingStepDTO> steps = service.getCookingStepsByRecipe(recipeId);
         return ResponseEntity.ok(steps);
     }
 
     /**
      * 새로운 조리 단계 추가
      *
-     * @param cookingStep 저장할 조리 단계 데이터 (Request Body)
-     * @return ResponseEntity<CookingStep> - 저장된 조리 단계 데이터와 HTTP 상태 코드
+     * @param dto CookingStepDTO
+     * @return ResponseEntity<CookingStepDTO>
      */
     @PostMapping
-    public ResponseEntity<CookingStep> createCookingStep(@RequestBody CookingStep cookingStep) {
-        CookingStep savedStep = cookingStepService.saveCookingStep(cookingStep);
-        return ResponseEntity.status(201).body(savedStep); // 201 Created
+    public ResponseEntity<CookingStepDTO> addCookingStep(@RequestBody CookingStepDTO dto) {
+        CookingStepDTO createdStep = service.addCookingStep(dto);
+        return ResponseEntity.ok(createdStep);
     }
 
     /**
      * 특정 조리 단계 수정
      *
-     * @param id 수정할 조리 단계 ID (Path Variable)
-     * @param updatedStep 수정할 조리 단계 데이터 (Request Body)
-     * @return ResponseEntity<CookingStep> - 수정된 조리 단계 데이터와 HTTP 상태 코드
+     * @param stepId 조리 단계 ID
+     * @param dto CookingStepDTO
+     * @return ResponseEntity<CookingStepDTO>
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<CookingStep> updateCookingStep(
-            @PathVariable Long id,
-            @RequestBody CookingStep updatedStep
+    @PutMapping("/{stepId}")
+    public ResponseEntity<CookingStepDTO> updateCookingStep(
+            @PathVariable(name = "stepId") Long stepId,
+            @RequestBody CookingStepDTO dto
     ) {
-        CookingStep step = cookingStepService.updateCookingStep(id, updatedStep);
-        return ResponseEntity.ok(step);
+        CookingStepDTO updatedStep = service.updateCookingStep(stepId, dto);
+        return ResponseEntity.ok(updatedStep);
     }
 
     /**
      * 특정 조리 단계 삭제
      *
-     * @param id 삭제할 조리 단계 ID (Path Variable)
-     * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
+     * @param stepId 조리 단계 ID
+     * @return ResponseEntity<Void>
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCookingStep(@PathVariable Long id) {
-        cookingStepService.deleteCookingStep(id);
-        return ResponseEntity.noContent().build(); // 204 No Content
+    @DeleteMapping("/{stepId}")
+    public ResponseEntity<Void> deleteCookingStep(
+            @PathVariable(name = "stepId") Long stepId
+    ) {
+        service.deleteCookingStep(stepId);
+        return ResponseEntity.noContent().build();
     }
 }

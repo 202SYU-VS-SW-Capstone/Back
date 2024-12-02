@@ -11,17 +11,27 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CookingStepImage { // 조리단계 이미지 테이블
+public class CookingStepImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "cooking_step_image_id", nullable = false, unique = true) // 명시적으로 컬럼 매핑
+    private Long id; // Primary Key
 
-    private String uuid;
-    private String originalName;
+    @Column(name = "file_name")
     private String fileName;
+
+    @Column(name = "original_name")
+    private String originalName;
+
+    @Column(name = "upload_date")
+    private LocalDate uploadDate;
+
+    @Column(name = "url")
     private String url;
 
-    private LocalDate uploadDate;
+    @Column(name = "uuid")
+    private String uuid;
 }
+
 
