@@ -10,17 +10,26 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class MemberImage {  // 회원 이미지 테이블
+public class MemberImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_image_id") // 실제 컬럼 이름과 맞춰주세요
     private Long id;
 
-    private String uuid;
-    private String originalName;
+    @Column(name = "file_name")
     private String fileName;
+
+    @Column(name = "original_name")
+    private String originalName;
+
+    @Column(name = "upload_date")
+    private LocalDate uploadDate;
+
+    @Column(name = "url")
     private String url;
 
-    private LocalDate uploadDate;
+    @Column(name = "uuid")
+    private String uuid;
 }
+

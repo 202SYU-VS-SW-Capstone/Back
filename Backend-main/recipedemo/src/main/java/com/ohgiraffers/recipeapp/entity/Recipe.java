@@ -15,6 +15,7 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recipe_id") // 테이블의 컬럼명에 매핑
     private Long id; // 레시피 ID
 
     @ManyToOne

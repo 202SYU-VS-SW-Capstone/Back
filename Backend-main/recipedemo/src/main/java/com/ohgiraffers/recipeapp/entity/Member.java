@@ -17,6 +17,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id; // 회원 ID
 
     @Column(nullable = false, unique = true)
@@ -29,7 +30,7 @@ public class Member {
     private String nickname; // 닉네임
 
     @ManyToOne
-    @JoinColumn(name = "profile_picture_id")
+    @JoinColumn(name = "profile_picture_id", referencedColumnName = "member_image_id")
     private MemberImage profilePicture; // 프로필 이미지
 
     @Enumerated(EnumType.STRING)

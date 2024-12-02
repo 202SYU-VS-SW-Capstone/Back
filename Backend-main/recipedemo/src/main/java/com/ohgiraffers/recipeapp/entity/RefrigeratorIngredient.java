@@ -31,7 +31,7 @@ public class RefrigeratorIngredient {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private IngredientStatus status = IngredientStatus.UNUSED; // 재료 상태
+    private IngredientStatus status = IngredientStatus.Unused; // 재료 상태
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate; // 재료의 유통기한

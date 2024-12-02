@@ -1,12 +1,12 @@
 package com.ohgiraffers.recipeapp.controller;
 
-import com.ohgiraffers.recipeapp.entity.RefrigeratorIngredient;
-import com.ohgiraffers.recipeapp.keys.RefrigeratorIngredientId;
+import com.ohgiraffers.recipeapp.dto.RefrigeratorIngredientDTO;
 import com.ohgiraffers.recipeapp.service.RefrigeratorIngredientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/refrigerator-ingredients")
@@ -19,43 +19,79 @@ public class RefrigeratorIngredientController {
     }
 
     /**
-     * 특정 회원의 냉장고 재료 목록 조회
+     * ID로 냉장고 재료 조회
      *
-     * @param memberId 회원 ID (Query Parameter)
-     * @return ResponseEntity<List<RefrigeratorIngredient>> - 해당 회원의 냉장고 재료 목록
+     * @param ingredientId 재료 ID
+     * @param memberId 회원 ID
+     * @return RefrigeratorIngredientDTO
      */
-    @GetMapping
-    public ResponseEntity<List<RefrigeratorIngredient>> getIngredientsByMember(@RequestParam Long memberId) {
-        List<RefrigeratorIngredient> ingredients = service.getIngredientsByMember(memberId);
+    @GetMapping("/{ingredientId}/{memberId}")
+    public ResponseEntity<RefrigeratorIngredientDTO> getById(
+            @PathVariable("ingredientId") Long ingredientId,
+            @PathVariable("memberId") Long memberId
+    ) {
+        return ResponseEntity.ok(
+                RefrigeratorIngredientDTO.fromEntity(service.getById(ingredientId, memberId))
+        );
+    }
+
+    /**
+     * 이름으로 냉장고 재료 조회
+     *
+     * @param ingredientName 재료 이름
+     * @param memberId 회원 ID
+     * @return List<RefrigeratorIngredientDTO>
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<RefrigeratorIngredientDTO>> getByName(
+            @RequestParam(name = "ingredientName") String ingredientName,
+            @RequestParam("memberId") Long memberId
+    ) {
+        List<RefrigeratorIngredientDTO> ingredients = service.getByName(ingredientName, memberId).stream()
+                .map(RefrigeratorIngredientDTO::fromEntity)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ingredients);
     }
 
     /**
-     * 냉장고 재료 추가 또는 수정
+     * 냉장고 재료 추가
      *
-     * @param ingredient 저장할 냉장고 재료 데이터 (Request Body)
-     * @return ResponseEntity<RefrigeratorIngredient> - 저장된 데이터
+     * @param dto RefrigeratorIngredientDTO
+     * @return RefrigeratorIngredientDTO
      */
     @PostMapping
-    public ResponseEntity<RefrigeratorIngredient> saveOrUpdateIngredient(@RequestBody RefrigeratorIngredient ingredient) {
-        RefrigeratorIngredient savedIngredient = service.saveOrUpdateIngredient(ingredient);
-        return ResponseEntity.ok(savedIngredient);
+    public ResponseEntity<RefrigeratorIngredientDTO> addIngredient(@RequestBody RefrigeratorIngredientDTO dto) {
+        return ResponseEntity.ok(
+                RefrigeratorIngredientDTO.fromEntity(service.addIngredient(dto))
+        );
     }
 
     /**
-     * 특정 냉장고 재료 삭제
+     * 냉장고 재료 수정
      *
-     * @param ingredientId 재료 ID (Path Variable)
-     * @param memberId 회원 ID (Path Variable)
-     * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
+     * @param dto RefrigeratorIngredientDTO
+     * @return RefrigeratorIngredientDTO
+     */
+    @PutMapping
+    public ResponseEntity<RefrigeratorIngredientDTO> updateIngredient(@RequestBody RefrigeratorIngredientDTO dto) {
+        return ResponseEntity.ok(
+                RefrigeratorIngredientDTO.fromEntity(service.updateIngredient(dto))
+        );
+    }
+
+    /**
+     * 냉장고 재료 삭제
+     *
+     * @param ingredientId 재료 ID
+     * @param memberId 회원 ID
+     * @return ResponseEntity<Void>
      */
     @DeleteMapping("/{ingredientId}/{memberId}")
     public ResponseEntity<Void> deleteIngredient(
-            @PathVariable Long ingredientId,
-            @PathVariable Long memberId
+            @PathVariable("ingredientId") Long ingredientId,
+            @PathVariable("memberId") Long memberId
     ) {
-        RefrigeratorIngredientId id = new RefrigeratorIngredientId(ingredientId, memberId);
-        service.deleteIngredient(id);
+        service.deleteIngredient(ingredientId, memberId);
         return ResponseEntity.noContent().build();
     }
 }

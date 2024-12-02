@@ -35,7 +35,7 @@ public class RecipeController {
      * @return ResponseEntity<Recipe> - 조회된 레시피 데이터와 HTTP 상태 코드
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long id) {
         Recipe recipe = recipeService.getRecipeById(id);
         return ResponseEntity.ok(recipe);
     }
@@ -47,7 +47,7 @@ public class RecipeController {
      * @return ResponseEntity<List<Recipe>> - 해당 작성자의 레시피 목록과 HTTP 상태 코드
      */
     @GetMapping("/author")
-    public ResponseEntity<List<Recipe>> getRecipesByAuthor(@RequestParam Long authorId) {
+    public ResponseEntity<List<Recipe>> getRecipesByAuthor(@RequestParam(name = "authorId") Long authorId) {
         List<Recipe> recipes = recipeService.getRecipesByAuthor(authorId);
         return ResponseEntity.ok(recipes);
     }
@@ -73,7 +73,7 @@ public class RecipeController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestBody Recipe updatedRecipe
     ) {
         Recipe recipe = recipeService.updateRecipe(id, updatedRecipe);
@@ -87,7 +87,7 @@ public class RecipeController {
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecipe(@PathVariable("id") Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
@@ -99,7 +99,7 @@ public class RecipeController {
      * @return ResponseEntity<List<Recipe>> - 제목에 해당 문자열이 포함된 레시피 목록과 HTTP 상태 코드
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Recipe>> searchRecipesByTitle(@RequestParam String title) {
+    public ResponseEntity<List<Recipe>> searchRecipesByTitle(@RequestParam(name = "title") String title) {
         List<Recipe> recipes = recipeService.searchRecipesByTitle(title);
         return ResponseEntity.ok(recipes);
     }
@@ -115,3 +115,4 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 }
+

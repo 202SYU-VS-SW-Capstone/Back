@@ -34,7 +34,7 @@ public class MemberController {
      * @return ResponseEntity<Member> - 조회된 회원 데이터와 HTTP 상태 코드
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
+    public ResponseEntity<Member> getMemberById(@PathVariable("id") Long id) {
         Member member = memberService.getMemberById(id);
         return ResponseEntity.ok(member);
     }
@@ -60,7 +60,7 @@ public class MemberController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Member> updateMember(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestBody Member updatedMember
     ) {
         Member member = memberService.updateMember(id, updatedMember);
@@ -74,7 +74,7 @@ public class MemberController {
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMember(@PathVariable("id") Long id) {
         memberService.deleteMember(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
@@ -86,7 +86,7 @@ public class MemberController {
      * @return ResponseEntity<Member> - 조회된 회원 데이터와 HTTP 상태 코드
      */
     @GetMapping("/search")
-    public ResponseEntity<Member> getMemberByNickname(@RequestParam String nickname) {
+    public ResponseEntity<Member> getMemberByNickname(@RequestParam(name = "nickname") String nickname) {
         Member member = memberService.getMemberByNickname(nickname);
         return ResponseEntity.ok(member);
     }
