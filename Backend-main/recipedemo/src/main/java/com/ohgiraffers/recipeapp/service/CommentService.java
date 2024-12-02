@@ -2,6 +2,7 @@ package com.ohgiraffers.recipeapp.service;
 
 import com.ohgiraffers.recipeapp.entity.Comment;
 import com.ohgiraffers.recipeapp.repository.CommentRepository;
+import com.ohgiraffers.recipeapp.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
 
-    public CommentService(CommentRepository commentRepository) {
+    public CommentService(CommentRepository commentRepository, MemberRepository memberRepository) {
         this.commentRepository = commentRepository;
+        this.memberRepository = memberRepository;
     }
 
     /**
@@ -44,6 +47,17 @@ public class CommentService {
      */
     public List<Comment> getCommentsByRecipe(Long recipeId) {
         return commentRepository.findByRecipeId(recipeId);
+    }
+
+    /**
+     * 특정 회원이 작성한 모든 댓글 조회
+     *
+     * @param memberId 회원 ID
+     * @return List<Comment> - 해당 회원이 작성한 댓글 목록
+     */
+    public List<Comment> getCommentsByMember(Long memberId) {
+        // 회원 ID를 기반으로 댓글 조회
+        return commentRepository.findByAuthorId(memberId);
     }
 
     /**

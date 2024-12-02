@@ -15,4 +15,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      * @return List<Comment> - 해당 레시피에 속한 댓글 목록
      */
     List<Comment> findByRecipeId(Long recipeId);
+
+    /**
+     * 특정 회원이 작성한 모든 댓글 조회
+     *
+     * @param memberId 회원 엔티티
+     * @return List<Comment> - 해당 회원이 작성한 댓글 목록
+     */
+    List<Comment> findByAuthorId(Long memberId);
 }

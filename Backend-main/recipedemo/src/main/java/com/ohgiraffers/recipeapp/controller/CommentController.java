@@ -2,6 +2,7 @@ package com.ohgiraffers.recipeapp.controller;
 
 import com.ohgiraffers.recipeapp.entity.Comment;
 import com.ohgiraffers.recipeapp.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class CommentController {
      * @return ResponseEntity<Comment> - 조회된 댓글 데이터와 HTTP 상태 코드
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable Long id) {
+    public ResponseEntity<Comment> getCommentById(@PathVariable(name = "id") Long id) {
         Comment comment = commentService.getCommentById(id);
         return ResponseEntity.ok(comment);
     }
@@ -46,8 +47,20 @@ public class CommentController {
      * @return ResponseEntity<List<Comment>> - 해당 레시피에 속한 댓글 목록과 HTTP 상태 코드
      */
     @GetMapping("/recipe")
-    public ResponseEntity<List<Comment>> getCommentsByRecipe(@RequestParam Long recipeId) {
+    public ResponseEntity<List<Comment>> getCommentsByRecipe(@RequestParam(name = "recipeId") Long recipeId) {
         List<Comment> comments = commentService.getCommentsByRecipe(recipeId);
+        return ResponseEntity.ok(comments);
+    }
+
+    /**
+     * 특정 회원이 작성한 댓글 조회
+     *
+     * @param memberId 회원 ID (Query Parameter)
+     * @return ResponseEntity<List<Comment>> - 해당 회원이 작성한 댓글 목록과 HTTP 상태 코드
+     */
+    @GetMapping("/member")
+    public ResponseEntity<List<Comment>> getCommentsByMember(@RequestParam(name = "memberId") Long memberId) {
+        List<Comment> comments = commentService.getCommentsByMember(memberId);
         return ResponseEntity.ok(comments);
     }
 
@@ -58,7 +71,7 @@ public class CommentController {
      * @return ResponseEntity<Comment> - 저장된 댓글 데이터와 HTTP 상태 코드
      */
     @PostMapping
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
+    public ResponseEntity<Comment> createComment(@Valid @RequestBody Comment comment) {
         Comment savedComment = commentService.saveComment(comment);
         return ResponseEntity.status(201).body(savedComment); // 201 Created
     }
@@ -72,8 +85,8 @@ public class CommentController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Comment> updateComment(
-            @PathVariable Long id,
-            @RequestBody Comment updatedComment
+            @PathVariable(name = "id") Long id,
+            @Valid @RequestBody Comment updatedComment
     ) {
         Comment comment = commentService.updateComment(id, updatedComment);
         return ResponseEntity.ok(comment);
@@ -86,7 +99,7 @@ public class CommentController {
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable(name = "id") Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
