@@ -35,7 +35,7 @@ public class RecipeReportController {
      * @return ResponseEntity<RecipeReport> - 신고 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeReport> getReportById(@PathVariable Long id) {
+    public ResponseEntity<RecipeReport> getReportById(@PathVariable("id") Long id) {
         RecipeReport report = recipeReportService.getReportById(id);
         return ResponseEntity.ok(report);
     }
@@ -47,7 +47,7 @@ public class RecipeReportController {
      * @return ResponseEntity<List<RecipeReport>> - 해당 레시피의 신고 목록
      */
     @GetMapping("/recipe")
-    public ResponseEntity<List<RecipeReport>> getReportsByRecipe(@RequestParam Long recipeId) {
+    public ResponseEntity<List<RecipeReport>> getReportsByRecipe(@RequestParam("recipeId") Long recipeId) {
         List<RecipeReport> reports = recipeReportService.getReportsByRecipe(recipeId);
         return ResponseEntity.ok(reports);
     }
@@ -59,7 +59,7 @@ public class RecipeReportController {
      * @return ResponseEntity<List<RecipeReport>> - 해당 회원의 신고 목록
      */
     @GetMapping("/reporter")
-    public ResponseEntity<List<RecipeReport>> getReportsByReporter(@RequestParam Long reporterId) {
+    public ResponseEntity<List<RecipeReport>> getReportsByReporter(@RequestParam("reporterId") Long reporterId) {
         List<RecipeReport> reports = recipeReportService.getReportsByReporter(reporterId);
         return ResponseEntity.ok(reports);
     }
@@ -77,13 +77,28 @@ public class RecipeReportController {
     }
 
     /**
+     * 특정 신고 수정
+     *
+     * @param id 수정할 신고 ID (Path Variable)
+     * @param updatedReport 수정할 신고 데이터 (Request Body)
+     * @return ResponseEntity<RecipeReport> - 수정된 신고 데이터
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<RecipeReport> updateReport(
+            @PathVariable("id") Long id,
+            @RequestBody RecipeReport updatedReport) {
+        RecipeReport report = recipeReportService.updateReport(id, updatedReport);
+        return ResponseEntity.ok(report);
+    }
+
+    /**
      * 특정 신고 삭제
      *
      * @param id 삭제할 신고 ID (Path Variable)
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReport(@PathVariable("id") Long id) {
         recipeReportService.deleteReport(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }

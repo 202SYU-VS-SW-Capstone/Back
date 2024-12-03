@@ -35,7 +35,7 @@ public class CommentReportController {
      * @return ResponseEntity<CommentReport> - 신고 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CommentReport> getReportById(@PathVariable Long id) {
+    public ResponseEntity<CommentReport> getReportById(@PathVariable("id") Long id) {
         CommentReport report = commentReportService.getReportById(id);
         return ResponseEntity.ok(report);
     }
@@ -47,7 +47,7 @@ public class CommentReportController {
      * @return ResponseEntity<List<CommentReport>> - 해당 댓글의 신고 목록
      */
     @GetMapping("/comment")
-    public ResponseEntity<List<CommentReport>> getReportsByComment(@RequestParam Long commentId) {
+    public ResponseEntity<List<CommentReport>> getReportsByComment(@RequestParam("commentId") Long commentId) {
         List<CommentReport> reports = commentReportService.getReportsByComment(commentId);
         return ResponseEntity.ok(reports);
     }
@@ -59,7 +59,7 @@ public class CommentReportController {
      * @return ResponseEntity<List<CommentReport>> - 해당 회원의 신고 목록
      */
     @GetMapping("/reporter")
-    public ResponseEntity<List<CommentReport>> getReportsByReporter(@RequestParam Long reporterId) {
+    public ResponseEntity<List<CommentReport>> getReportsByReporter(@RequestParam("reporterId") Long reporterId) {
         List<CommentReport> reports = commentReportService.getReportsByReporter(reporterId);
         return ResponseEntity.ok(reports);
     }
@@ -77,13 +77,29 @@ public class CommentReportController {
     }
 
     /**
+     * 특정 신고 수정
+     *
+     * @param id 신고 ID (Path Variable)
+     * @param updatedReport 수정할 신고 데이터 (Request Body)
+     * @return ResponseEntity<CommentReport> - 수정된 신고 데이터
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentReport> updateReport(
+            @PathVariable("id") Long id,
+            @RequestBody CommentReport updatedReport) {
+        CommentReport updated = commentReportService.updateReport(id, updatedReport);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    /**
      * 특정 신고 삭제
      *
      * @param id 삭제할 신고 ID (Path Variable)
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReport(@PathVariable("id") Long id) {
         commentReportService.deleteReport(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }

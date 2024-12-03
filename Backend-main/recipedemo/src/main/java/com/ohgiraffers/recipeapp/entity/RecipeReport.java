@@ -15,6 +15,7 @@ public class RecipeReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Report_id")
     private Long id; // 신고 ID
 
     @ManyToOne

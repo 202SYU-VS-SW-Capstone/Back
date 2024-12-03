@@ -69,6 +69,25 @@ public class RecipeReportService {
     }
 
     /**
+     * 특정 신고 수정
+     *
+     * @param id 수정할 신고 ID
+     * @param updatedReport 수정할 신고 데이터
+     * @return RecipeReport - 수정된 신고 데이터
+     */
+    public RecipeReport updateReport(Long id, RecipeReport updatedReport) {
+        RecipeReport existingReport = recipeReportRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("신고를 찾을 수 없습니다. ID: " + id));
+
+        // 필드 업데이트 (수정 가능한 필드만 갱신)
+        existingReport.setReportTitle(updatedReport.getReportTitle());
+        existingReport.setReportContent(updatedReport.getReportContent());
+        existingReport.setReportedAt(updatedReport.getReportedAt());
+
+        return recipeReportRepository.save(existingReport);
+    }
+
+    /**
      * 특정 신고 삭제
      *
      * @param id 삭제할 신고 ID

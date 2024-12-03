@@ -15,6 +15,7 @@ public class CommentReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "report_id")
     private Long id; // 신고 ID
 
     @ManyToOne

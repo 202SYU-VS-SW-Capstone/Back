@@ -69,6 +69,21 @@ public class CommentReportService {
     }
 
     /**
+     * 특정 신고 수정
+     *
+     * @param id 신고 ID
+     * @param updatedReport 수정할 신고 데이터
+     * @return CommentReport - 수정된 신고 데이터
+     * @throws IllegalArgumentException - 해당 ID의 신고가 없을 경우 예외 발생
+     */
+    public CommentReport updateReport(Long id, CommentReport updatedReport) {
+        CommentReport existingReport = getReportById(id);
+        existingReport.setReportTitle(updatedReport.getReportTitle());
+        existingReport.setReportContent(updatedReport.getReportContent());
+        return commentReportRepository.save(existingReport);
+    }
+
+    /**
      * 특정 신고 삭제
      *
      * @param id 삭제할 신고 ID
