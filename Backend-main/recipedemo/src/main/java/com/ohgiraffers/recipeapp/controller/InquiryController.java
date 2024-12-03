@@ -36,7 +36,7 @@ public class InquiryController {
      * @return ResponseEntity<List<Inquiry>> - 해당 회원의 문의 목록
      */
     @GetMapping("/member")
-    public ResponseEntity<List<Inquiry>> getInquiriesByMember(@RequestParam Long memberId) {
+    public ResponseEntity<List<Inquiry>> getInquiriesByMember(@RequestParam("memberId") Long memberId) {
         List<Inquiry> inquiries = inquiryService.getInquiriesByMember(memberId);
         return ResponseEntity.ok(inquiries);
     }
@@ -48,7 +48,7 @@ public class InquiryController {
      * @return ResponseEntity<List<Inquiry>> - 해당 상태의 문의 목록
      */
     @GetMapping("/status")
-    public ResponseEntity<List<Inquiry>> getInquiriesByStatus(@RequestParam InquiryStatus status) {
+    public ResponseEntity<List<Inquiry>> getInquiriesByStatus(@RequestParam("status") InquiryStatus status) {
         List<Inquiry> inquiries = inquiryService.getInquiriesByStatus(status);
         return ResponseEntity.ok(inquiries);
     }
@@ -60,7 +60,7 @@ public class InquiryController {
      * @return ResponseEntity<Inquiry> - 조회된 문의 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Inquiry> getInquiryById(@PathVariable Long id) {
+    public ResponseEntity<Inquiry> getInquiryById(@PathVariable("id") Long id) {
         Inquiry inquiry = inquiryService.getInquiryById(id);
         return ResponseEntity.ok(inquiry);
     }
@@ -86,8 +86,8 @@ public class InquiryController {
      */
     @PatchMapping("/{id}/status")
     public ResponseEntity<Inquiry> updateInquiryStatus(
-            @PathVariable Long id,
-            @RequestParam InquiryStatus status
+            @PathVariable("id") Long id,
+            @RequestParam("status") InquiryStatus status
     ) {
         Inquiry updatedInquiry = inquiryService.updateInquiryStatus(id, status);
         return ResponseEntity.ok(updatedInquiry);
@@ -100,7 +100,7 @@ public class InquiryController {
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInquiry(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteInquiry(@PathVariable("id") Long id) {
         inquiryService.deleteInquiry(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }

@@ -43,7 +43,7 @@ public class InquiryService {
      * @return List<Inquiry> - 해당 상태의 문의 목록
      */
     public List<Inquiry> getInquiriesByStatus(InquiryStatus status) {
-        return inquiryRepository.findByStatus(status.name());
+        return inquiryRepository.findByStatus(status);
     }
 
     /**

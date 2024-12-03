@@ -16,6 +16,7 @@ public class Inquiry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "inquiry_id")
     private Long id; // 문의 ID
 
     @ManyToOne
@@ -30,5 +31,5 @@ public class Inquiry {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "ENUM('Incomplete', 'Complete')")
-    private InquiryStatus status = InquiryStatus.INCOMPLETE; // 문의 상태
+    private InquiryStatus status = InquiryStatus.Incomplete; // 문의 상태
 }
