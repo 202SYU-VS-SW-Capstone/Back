@@ -23,6 +23,15 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
      * @return boolean - 북마크 여부
      */
     boolean existsByMemberIdAndRecipeId(Long memberId, Long recipeId);
+
+    /**
+     * 특정 회원과 레시피로 북마크 조회
+     * @param memberId 회원 ID
+     * @param recipeId 레시피 ID
+     * @return Bookmark - 북마크 데이터
+     */
+    Bookmark findByMemberIdAndRecipeId(Long memberId, Long recipeId);
 }
+
 
 

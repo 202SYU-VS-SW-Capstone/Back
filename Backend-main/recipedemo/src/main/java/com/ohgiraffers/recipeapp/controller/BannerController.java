@@ -35,7 +35,7 @@ public class BannerController {
      * @return ResponseEntity<List<Banner>> - 해당 회원이 생성한 배너 목록
      */
     @GetMapping("/member")
-    public ResponseEntity<List<Banner>> getBannersByMember(@RequestParam Long memberId) {
+    public ResponseEntity<List<Banner>> getBannersByMember(@RequestParam("memberId") Long memberId) {
         List<Banner> banners = bannerService.getBannersByMember(memberId);
         return ResponseEntity.ok(banners);
     }
@@ -47,7 +47,7 @@ public class BannerController {
      * @return ResponseEntity<List<Banner>> - 해당 공지사항과 연결된 배너 목록
      */
     @GetMapping("/notice")
-    public ResponseEntity<List<Banner>> getBannersByNotice(@RequestParam Long noticeId) {
+    public ResponseEntity<List<Banner>> getBannersByNotice(@RequestParam("noticeId") Long noticeId) {
         List<Banner> banners = bannerService.getBannersByNotice(noticeId);
         return ResponseEntity.ok(banners);
     }
@@ -59,7 +59,7 @@ public class BannerController {
      * @return ResponseEntity<Banner> - 조회된 배너 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Banner> getBannerById(@PathVariable Long id) {
+    public ResponseEntity<Banner> getBannerById(@PathVariable("id") Long id) {
         Banner banner = bannerService.getBannerById(id);
         return ResponseEntity.ok(banner);
     }
@@ -77,15 +77,30 @@ public class BannerController {
     }
 
     /**
+     * 특정 배너 수정
+     *
+     * @param id 배너 ID (Path Variable)
+     * @param updatedBanner 수정할 배너 데이터 (Request Body)
+     * @return ResponseEntity<Banner> - 수정된 배너 데이터
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Banner> updateBanner(
+            @PathVariable("id") Long id,
+            @RequestBody Banner updatedBanner
+    ) {
+        Banner banner = bannerService.updateBanner(id, updatedBanner);
+        return ResponseEntity.ok(banner);
+    }
+
+    /**
      * 특정 배너 삭제
      *
      * @param id 삭제할 배너 ID (Path Variable)
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBanner(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBanner(@PathVariable("id") Long id) {
         bannerService.deleteBanner(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 }
-

@@ -15,6 +15,7 @@ public class Bookmark { // 북마크 테이블
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bookmark_id")
     private Long id; // 북마크 ID
 
     @ManyToOne

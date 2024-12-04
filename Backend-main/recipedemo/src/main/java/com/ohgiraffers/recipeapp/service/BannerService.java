@@ -69,6 +69,26 @@ public class BannerService {
     }
 
     /**
+     * 특정 배너 수정
+     *
+     * @param id 수정할 배너 ID
+     * @param updatedBanner 수정할 배너 데이터
+     * @return Banner - 수정된 배너 데이터
+     */
+    public Banner updateBanner(Long id, Banner updatedBanner) {
+        Banner existingBanner = bannerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Banner with ID " + id + " not found."));
+
+        // 필요한 필드를 업데이트
+        existingBanner.setNotice(updatedBanner.getNotice());
+        existingBanner.setMember(updatedBanner.getMember());
+        existingBanner.setBannerImage(updatedBanner.getBannerImage());
+        existingBanner.setCreatedAt(updatedBanner.getCreatedAt());
+
+        return bannerRepository.save(existingBanner);
+    }
+
+    /**
      * 특정 배너 삭제
      *
      * @param id 삭제할 배너 ID

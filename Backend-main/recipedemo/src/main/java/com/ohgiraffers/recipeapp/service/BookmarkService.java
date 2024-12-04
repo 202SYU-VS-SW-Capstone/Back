@@ -1,6 +1,8 @@
 package com.ohgiraffers.recipeapp.service;
 
 import com.ohgiraffers.recipeapp.entity.Bookmark;
+import com.ohgiraffers.recipeapp.entity.Member;
+import com.ohgiraffers.recipeapp.entity.Recipe;
 import com.ohgiraffers.recipeapp.repository.BookmarkRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,6 @@ public class BookmarkService {
     }
 
     /**
-     * 새로운 북마크 추가
-     *
-     * @param bookmark 저장할 북마크 데이터
-     * @return Bookmark - 저장된 북마크 데이터
-     */
-    public Bookmark saveBookmark(Bookmark bookmark) {
-        bookmark.setSavedAt(LocalDate.now()); // 저장 시 현재 날짜 설정
-        return bookmarkRepository.save(bookmark);
-    }
-
-    /**
      * 특정 회원이 특정 레시피를 북마크했는지 확인
      *
      * @param memberId 회원 ID
@@ -49,11 +40,30 @@ public class BookmarkService {
     }
 
     /**
-     * 북마크 삭제
+     * 북마크 추가 또는 삭제 (토글 방식)
      *
-     * @param id 삭제할 북마크 ID
+     * @param memberId 회원 ID
+     * @param recipeId 레시피 ID
+     * @return boolean - true: 북마크 추가됨, false: 북마크 삭제됨
      */
-    public void deleteBookmark(Long id) {
-        bookmarkRepository.deleteById(id);
+    public boolean toggleBookmark(Long memberId, Long recipeId) {
+        boolean isBookmarked = bookmarkRepository.existsByMemberIdAndRecipeId(memberId, recipeId);
+
+        if (isBookmarked) {
+            // 북마크 삭제
+            Bookmark bookmark = bookmarkRepository.findByMemberIdAndRecipeId(memberId, recipeId);
+            bookmarkRepository.delete(bookmark);
+            return false;
+        } else {
+            // 북마크 추가
+            Bookmark bookmark = Bookmark.builder()
+                    .member(Member.builder().id(memberId).build())
+                    .recipe(Recipe.builder().id(recipeId).build())
+                    .savedAt(LocalDate.now())
+                    .build();
+            bookmarkRepository.save(bookmark);
+            return true;
+        }
     }
 }
+

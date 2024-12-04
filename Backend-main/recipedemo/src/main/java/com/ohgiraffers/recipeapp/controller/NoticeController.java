@@ -35,7 +35,7 @@ public class NoticeController {
      * @return ResponseEntity<Notice> - 조회된 공지사항 데이터와 HTTP 상태 코드
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Notice> getNoticeById(@PathVariable Long id) {
+    public ResponseEntity<Notice> getNoticeById(@PathVariable("id") Long id) {
         Notice notice = noticeService.getNoticeById(id);
         return ResponseEntity.ok(notice);
     }
@@ -47,7 +47,7 @@ public class NoticeController {
      * @return ResponseEntity<List<Notice>> - 검색된 공지사항 목록과 HTTP 상태 코드
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Notice>> searchNoticesByTitle(@RequestParam String title) {
+    public ResponseEntity<List<Notice>> searchNoticesByTitle(@RequestParam("title") String title) {
         List<Notice> notices = noticeService.searchNoticesByTitle(title);
         return ResponseEntity.ok(notices);
     }
@@ -73,7 +73,7 @@ public class NoticeController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Notice> updateNotice(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestBody Notice updatedNotice
     ) {
         Notice notice = noticeService.updateNotice(id, updatedNotice);
@@ -87,7 +87,7 @@ public class NoticeController {
      * @return ResponseEntity<Void> - 본문 없이 HTTP 상태 코드만 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNotice(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteNotice(@PathVariable("id") Long id) {
         noticeService.deleteNotice(id);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
