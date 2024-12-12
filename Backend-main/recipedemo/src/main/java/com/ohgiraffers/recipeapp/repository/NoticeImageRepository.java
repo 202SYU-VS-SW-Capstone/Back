@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NoticeImageRepository extends JpaRepository<NoticeImage, Long> {
-    // UUID로 이미지 찾기
-    NoticeImage findByUuid(String uuid);
 }

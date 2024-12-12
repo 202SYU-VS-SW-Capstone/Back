@@ -14,7 +14,7 @@ public class MemberImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_image_id") // 실제 컬럼 이름과 맞춰주세요
+    @Column(name = "member_image_id")
     private Long id;
 
     @Column(name = "file_name")

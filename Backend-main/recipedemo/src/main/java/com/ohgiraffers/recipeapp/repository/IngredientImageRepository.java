@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IngredientImageRepository extends JpaRepository<IngredientImage, Long> {
-    // UUID로 이미지 찾기
-    IngredientImage findByUuid(String uuid);
 }

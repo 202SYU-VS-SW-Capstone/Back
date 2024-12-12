@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FinalImageRepository extends JpaRepository<FinalImage, Long> {
-    // UUID로 이미지 찾기
-    FinalImage findByUuid(String uuid);
 }
