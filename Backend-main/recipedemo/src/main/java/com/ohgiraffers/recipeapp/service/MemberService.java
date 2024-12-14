@@ -4,6 +4,7 @@ import com.ohgiraffers.recipeapp.entity.Member;
 import com.ohgiraffers.recipeapp.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +44,18 @@ public class MemberService {
 
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    public Long join(Member member) {
+        // 이미 존재하는 이메일인지 확인
+        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
+            throw new RuntimeException("이미 존재하는 이메일입니다.");
+        }
+
+        // 회원 저장
+        Member savedMember = memberRepository.save(member);
+
+        // 저장된 회원의 ID 반환
+        return savedMember.getId();
     }
 }

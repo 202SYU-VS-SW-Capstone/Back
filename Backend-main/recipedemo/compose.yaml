@@ -1,29 +1,36 @@
 version: '3.8'
+
 services:
-  mysql:
+  # MySQL 서비스 정의
+  saegil-db:
     image: mysql:8.0
     container_name: saegil-db
     environment:
-      MYSQL_ROOT_PASSWORD: 1868  # MySQL root 비밀번호
-      MYSQL_DATABASE: saegil  # 사용할 데이터베이스 이름
+      MYSQL_ROOT_PASSWORD: 1868
+      MYSQL_DATABASE: saegil
     ports:
       - "3306:3306"  # MySQL 포트 매핑
-    volumes:
-      - saegil-db-data:/var/lib/mysql
     networks:
       - saegil-network
+    volumes:
+      - saegil-db-data:/var/lib/mysql
 
-  app:
-    image: your-spring-boot-app-image  # Spring Boot 애플리케이션 이미지
+  # Spring Boot 애플리케이션
+  recipedemo:
+    build:
+      context: .  # 현재 디렉토리에서 빌드
     container_name: recipeapp
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/saegil
+      SPRING_DATASOURCE_URL: jdbc:mysql://saegil-db:3306/saegil
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1868
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JWT_SECRET: saegil12345
     ports:
-      - "8080:8080"  # Spring Boot 애플리케이션 포트 매핑
+      - "8080:8080"  # Spring Boot 앱 포트 매핑
     depends_on:
-      - mysql
+      - saegil-db
     networks:
       - saegil-network
 
