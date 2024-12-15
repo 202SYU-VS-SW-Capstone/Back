@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
@@ -32,16 +33,18 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         // Swagger 관련 요청 허용
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/api/v1/member").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html").permitAll()
 
-                        // 카카오 로그인 및 인증 관련 요청 허용
+                        // 인증 없이 허용할 요청 (회원가입, 로그인 등)
                         .requestMatchers("/auth/login", "/auth/token").permitAll()
-
-                        // 메인 페이지 및 추가 경로 허용
                         .requestMatchers("/", "/home", "/login").permitAll()
 
-                        // 나머지 요청은 인증 필요
-                        .anyRequest().authenticated()
+                        // 권한 기반 접근 제어
+                        .requestMatchers("/api/members/**").hasAnyRole("USER", "ADMIN") // USER 또는 ADMIN 권한 필요
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // ADMIN 권한만 필요
+
+                        // 나머지 요청은 인증만 필요
+                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/auth/login") // 카카오 로그인 페이지 설정
@@ -55,7 +58,8 @@ public class SecurityConfig {
                     configuration.addAllowedHeader("*");
                     configuration.setAllowCredentials(true);
                     return configuration;
-                }));
+                }))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

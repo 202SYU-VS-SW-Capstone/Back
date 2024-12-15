@@ -5,6 +5,8 @@ import com.ohgiraffers.recipeapp.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,25 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity<List<Member>> getAllMembers() {
-        return new ResponseEntity<>(memberService.findAllMembers(), HttpStatus.OK);
+        // 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증 정보 로그 출력
+        Object principal = authentication.getPrincipal();
+        System.out.println("Principal (User Details): " + authentication.getPrincipal());
+        System.out.println("Authorities (Roles): " + authentication.getAuthorities());
+        System.out.println("Is Authenticated: " + authentication.isAuthenticated());
+
+        // 멤버 리스트 가져오기
+        List<Member> members = memberService.findAllMembers();
+
+        // 멤버 리스트와 Principal 정보 로그 출력
+        System.out.println("Members List: " + members);
+
+        // 멤버 리스트 반환
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Member> getMemberById(@PathVariable Long id) {

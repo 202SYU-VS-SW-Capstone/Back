@@ -239,22 +239,12 @@ CREATE TABLE IF NOT EXISTS recipe_reports (
                                               FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE
 );
 
-# DESCRIBE members;
-INSERT INTO members (username, email, password, nickname, security_question, member_type, join_date) VALUES
-    ('test_user', 'test_user@gmail.com', 'test1234', 'TestNickname', 'Question1', 'Regular', CURDATE());
-
-ALTER TABLE members MODIFY COLUMN nickname VARCHAR(255) DEFAULT 'Guest';
-
-ALTER TABLE members MODIFY COLUMN security_question ENUM('Question1', 'Question2', 'Question15') DEFAULT 'Question1';
-
-ALTER TABLE members MODIFY COLUMN member_type ENUM('Regular', 'Login', 'Admin') DEFAULT 'Regular';
-
-ALTER TABLE members MODIFY COLUMN join_date DATE DEFAULT (CURDATE());
-
-DELETE FROM members WHERE email = 'test_user@gmail.com';
-
-INSERT INTO members (username, email, password, nickname, security_question, member_type)
-VALUES ('new_user', 'new_user@gmail.com', 'password123', 'NewNickname', 'Question1', 'Regular');
 
 
 
+
+
+DESCRIBE members;
+
+ALTER TABLE members
+    ADD COLUMN id BIGINT AUTO_INCREMENT PRIMARY KEY;

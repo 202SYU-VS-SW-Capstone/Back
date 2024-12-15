@@ -46,11 +46,19 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
+
     public Long join(Member member) {
-        // 이미 존재하는 이메일인지 확인
+        // 이메일 중복 확인
         if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
+
+        // 권한 설정 (기본값: ROLE_USER)
+        if (member.getRole() == null || member.getRole().isBlank()) {
+            member.setRole("ROLE_USER");
+        }
+        // 권한 받아서 하는 부분까지는 아직 무리라서 이 부분 빼고 연결하면 될듯!!!
+        // 정리해서 올려드리기!!!
 
         // 회원 저장
         Member savedMember = memberRepository.save(member);
@@ -58,4 +66,5 @@ public class MemberService {
         // 저장된 회원의 ID 반환
         return savedMember.getId();
     }
+
 }
